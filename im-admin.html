@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IM Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif; }
+  body { background: #f8fafc; }
+  .icon { width: 18px; height: 18px; display: inline-block; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  ::-webkit-scrollbar { height: 8px; width: 8px; }
+  ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+  .nav-item.active { background: #ecfdf5; color: #047857; }
+  .subnav-item.active { background: #ecfdf5; color: #047857; font-weight: 500; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .fade-in { animation: fadeIn .18s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Top bar -->
+<div class="h-[60px] flex items-center justify-between px-6 sticky top-0 z-30" style="background:#1e2a3f;">
+  <div class="flex items-center gap-3">
+    <span class="text-white font-bold text-[17px] tracking-tight">IM Admin</span>
+    <span class="text-emerald-400 text-[12px] font-medium rounded-full px-2.5 py-0.5" style="border:1px solid rgba(52,211,153,.4)">v1.0.0</span>
+  </div>
+  <div class="flex items-center gap-5">
+    <div class="flex items-center gap-2 text-emerald-400 text-[13px]">
+      <svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>服务器时间 (+00:00)</span>
+      <span class="text-white/70 ml-1 tabular" id="clock">2026/07/26 08:08:49</span>
+    </div>
+    <button id="themeBtn" class="text-white/70 hover:text-white transition">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <svg class="icon text-white/70 hover:text-white transition cursor-pointer" viewBox="0 0 24 24"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>
+    <div class="w-8 h-8 rounded-full bg-slate-500 text-white flex items-center justify-center text-sm font-medium">a</div>
+  </div>
+</div>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <div id="sidebar" class="w-[240px] shrink-0 bg-white border-r border-slate-100 min-h-[calc(100vh-60px)] py-5 px-3 relative transition-all duration-200">
+    <nav class="space-y-1" id="nav"></nav>
+    <button id="collapseBtn" class="absolute -right-[15px] top-5 w-[30px] h-[30px] rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:border-emerald-300 transition shadow-sm">
+      <svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><path d="M14 9l-3 3 3 3"/></svg>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 p-8 min-w-0">
+
+    <!-- Dashboard -->
+    <div class="page active fade-in" id="page-dashboard">
+      <h1 class="text-[22px] font-bold text-slate-800 mb-6">数据看板</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4"><span class="text-[14px] text-slate-500">总用户数</span>
+            <svg class="icon text-slate-400" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="text-[30px] font-bold text-slate-800 tabular">189</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4"><span class="text-[14px] text-slate-500">总连结数</span>
+            <svg class="icon text-slate-400" viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></div>
+          <div class="text-[30px] font-bold text-slate-800 tabular">1</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4"><span class="text-[14px] text-slate-500">总讯息数</span>
+            <svg class="icon text-slate-400" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="text-[30px] font-bold text-slate-800 tabular">6,630</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4"><span class="text-[14px] text-slate-500">总群组数</span>
+            <svg class="icon text-slate-400" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="text-[30px] font-bold text-slate-800 tabular">132</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4"><span class="text-[14px] text-slate-500">在线用户数</span>
+            <svg class="icon text-slate-400" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg></div>
+          <div class="text-[30px] font-bold text-slate-800 tabular">1</div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4"><span class="text-[14px] text-slate-500">今日用户数</span>
+            <svg class="icon text-slate-400" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="text-[30px] font-bold text-slate-800 tabular">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roles -->
+    <div class="page fade-in" id="page-roles">
+      <h1 class="text-[22px] font-bold text-slate-800 mb-6">IM 用户角色</h1>
+      <div class="bg-white border border-slate-200 rounded-xl p-5 mb-5">
+        <div class="text-[15px] font-semibold text-slate-800 mb-4">筛选</div>
+        <div class="flex flex-wrap gap-3 mb-4">
+          <input placeholder="角色名称" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="标识符" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <select class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm text-slate-400 outline-none focus:border-emerald-400"><option>状态</option></select>
+        </div>
+        <div class="flex gap-3">
+          <button class="h-10 px-5 rounded-lg bg-slate-900 text-white text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>搜索</button>
+          <button class="h-10 px-5 rounded-lg bg-slate-100 text-slate-500 text-sm font-medium">清除</button>
+        </div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div class="flex items-center justify-between p-5">
+          <button class="h-10 px-4 rounded-lg bg-emerald-500 text-white text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>创建角色</button>
+        </div>
+        <div class="overflow-x-auto">
+        <table class="w-full border-t border-slate-100">
+          <thead><tr class="border-b border-slate-100 text-left text-[13px] font-medium text-slate-400">
+            <th class="px-5 py-3.5">角色名称</th><th class="px-5 py-3.5">标识符</th><th class="px-5 py-3.5">状态</th><th class="px-5 py-3.5">用户数量</th><th class="px-5 py-3.5">排序</th><th class="px-5 py-3.5">描述</th><th class="px-5 py-3.5">更新时间</th><th class="px-5 py-3.5"></th>
+          </tr></thead>
+          <tbody id="rolesBody" class="text-[14px] text-slate-700"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="page fade-in" id="page-logs">
+      <h1 class="text-[22px] font-bold text-slate-800 mb-6">登录日志</h1>
+      <div class="bg-white border border-slate-200 rounded-xl p-5 mb-5">
+        <div class="text-[15px] font-semibold text-slate-800 mb-4">筛选</div>
+        <div class="flex flex-wrap gap-3 mb-4">
+          <input placeholder="用户 ID" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <select class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm text-slate-400 outline-none focus:border-emerald-400"><option>登录类型</option></select>
+          <input placeholder="设备 ID" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="IP 地址" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="登录时间" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+        </div>
+        <div class="flex gap-3">
+          <button class="h-10 px-5 rounded-lg bg-slate-900 text-white text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>搜索</button>
+          <button class="h-10 px-5 rounded-lg bg-slate-100 text-slate-500 text-sm font-medium">清除</button>
+        </div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead><tr class="border-b border-slate-100 text-left text-[13px] font-medium text-slate-400">
+            <th class="px-5 py-3.5">用户</th><th class="px-5 py-3.5">状态</th><th class="px-5 py-3.5">设备类型</th><th class="px-5 py-3.5">设备ID</th><th class="px-5 py-3.5">IP 地址</th><th class="px-5 py-3.5">位置</th><th class="px-5 py-3.5">请求标头</th><th class="px-5 py-3.5">登录时间</th>
+          </tr></thead>
+          <tbody id="logsBody" class="text-[14px] text-slate-700"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div class="page fade-in" id="page-users">
+      <h1 class="text-[22px] font-bold text-slate-800 mb-6">用户列表</h1>
+      <div class="bg-white border border-slate-200 rounded-xl p-5 mb-5">
+        <div class="text-[15px] font-semibold text-slate-800 mb-4">筛选</div>
+        <div class="flex flex-wrap gap-3 mb-4">
+          <input placeholder="用户 ID" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="用户名" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="手机号码" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="電子郵箱" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <select class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm text-slate-400 outline-none focus:border-emerald-400"><option>状态</option></select>
+          <select class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm text-slate-400 outline-none focus:border-emerald-400"><option>用户角色</option></select>
+          <input placeholder="注册时间" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="更新时间" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+          <input placeholder="最后在线时间" class="flex-1 min-w-[160px] h-11 rounded-lg border border-slate-200 px-3.5 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"/>
+        </div>
+        <div class="flex gap-3">
+          <button class="h-10 px-5 rounded-lg bg-slate-900 text-white text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>搜索</button>
+          <button class="h-10 px-5 rounded-lg bg-slate-100 text-slate-500 text-sm font-medium">清除</button>
+        </div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div class="flex items-center justify-between p-5">
+          <div class="flex gap-3">
+            <button class="h-10 px-4 rounded-lg bg-emerald-500 text-white text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>创建用户</button>
+            <button class="h-10 px-4 rounded-lg bg-amber-50 text-amber-600 text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>批量设置角色</button>
+            <button class="h-10 px-4 rounded-lg bg-slate-100 text-slate-500 text-sm font-medium flex items-center gap-2"><svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>导出用户</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead><tr class="border-b border-slate-100 text-left text-[13px] font-medium text-slate-400">
+            <th class="px-5 py-3.5"><input type="checkbox" class="rounded border-slate-300"/></th>
+            <th class="px-5 py-3.5">显示名称 / 用户名 / UID</th><th class="px-5 py-3.5">联系方式</th><th class="px-5 py-3.5">用户角色</th><th class="px-5 py-3.5">状态</th><th class="px-5 py-3.5">注册时间</th><th class="px-5 py-3.5">更新时间</th><th class="px-5 py-3.5">最后在线时间</th><th class="px-5 py-3.5">备注</th><th class="px-5 py-3.5"></th>
+          </tr></thead>
+          <tbody id="usersBody" class="text-[14px] text-slate-700"></tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder -->
+    <div class="page fade-in" id="page-placeholder">
+      <div class="text-slate-400 text-sm">该模块尚未开放，敬请期待。</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ------- nav config -------
+const NAV = [
+  { key: "dashboard", label: "数据看板", icon: 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z' },
+  { key: "users", label: "用户管理", isGroup: true, icon: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+    children: [
+      { key: "users", label: "用户列表" },
+      { key: "logs", label: "登录日志" },
+      { key: "roles", label: "IM 用户角色" },
+    ]},
+  { key: "chat", label: "聊天管理", icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' },
+  { key: "wallet", label: "钱包管理", icon: 'M21 12V7H5a2 2 0 0 1 0-4h14v4M3 5v14a2 2 0 0 0 2 2h16v-5M18 12a2 2 0 0 0 0 4h4v-4z' },
+  { key: "system", label: "系统配置", icon: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' },
+  { key: "admin", label: "管理员管理", icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
+];
+
+let openGroup = "users";
+let active = "dashboard";
+let collapsed = false;
+
+function renderNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  NAV.forEach(item => {
+    const wrap = document.createElement('div');
+    const childActive = item.children && item.children.some(c => c.key === active);
+    const selfActive = active === item.key;
+    const btn = document.createElement('button');
+    btn.className = `nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[14px] font-medium transition ${ (selfActive||childActive) ? 'active' : 'text-slate-600 hover:bg-slate-50'}`;
+    btn.innerHTML = `
+      <svg class="icon shrink-0" viewBox="0 0 24 24"><path d="${item.icon}"/></svg>
+      ${!collapsed ? `<span class="flex-1 text-left">${item.label}</span>` : ''}
+      ${(!collapsed && item.isGroup) ? `<svg class="icon opacity-60" style="width:16px;height:16px" viewBox="0 0 24 24">${openGroup===item.key ? '<polyline points="6 9 12 15 18 9"/>' : '<polyline points="9 18 15 12 9 6"/>'}</svg>` : ''}
+    `;
+    btn.onclick = () => {
+      if (item.isGroup) {
+        openGroup = openGroup === item.key ? '' : item.key;
+        if (collapsed) { collapsed = false; document.getElementById('sidebar').classList.remove('w-[76px]'); document.getElementById('sidebar').classList.add('w-[240px]'); }
+        renderNav();
+      } else {
+        setActive(item.key);
+      }
+    };
+    wrap.appendChild(btn);
+
+    if (!collapsed && item.children && openGroup === item.key) {
+      const sub = document.createElement('div');
+      sub.className = 'ml-[27px] mt-1 space-y-0.5 border-l border-slate-100 pl-3';
+      item.children.forEach(c => {
+        const cbtn = document.createElement('button');
+        cbtn.className = `subnav-item w-full text-left px-3 py-2 rounded-lg text-[13.5px] transition ${active===c.key ? 'active' : 'text-slate-500 hover:bg-slate-50'}`;
+        cbtn.textContent = c.label;
+        cbtn.onclick = () => setActive(c.key);
+        sub.appendChild(cbtn);
+      });
+      wrap.appendChild(sub);
+    }
+    nav.appendChild(wrap);
+  });
+}
+
+function setActive(key) {
+  active = key;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + key) || document.getElementById('page-placeholder');
+  target.classList.add('active');
+  renderNav();
+}
+
+document.getElementById('collapseBtn').onclick = () => {
+  collapsed = !collapsed;
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('w-[240px]', !collapsed);
+  sb.classList.toggle('w-[76px]', collapsed);
+  renderNav();
+};
+
+document.getElementById('themeBtn').onclick = () => {
+  document.body.classList.toggle('dark-mode');
+};
+
+// ------- table data -------
+const ROLES = [
+  { name:"管理员", tag:"admin", color:"#f97316", isDefault:true, count:1, order:1, desc:"管理员", updated:"2026/07/20 20:09:22" },
+  { name:"版主", tag:"moderator", color:"#8b5cf6", isDefault:true, count:0, order:2, desc:"版主", updated:"2026/07/16 14:29:41" },
+  { name:"高级用户", tag:"vip", color:"#ec4899", isDefault:true, count:1, order:3, desc:"高级用户", updated:"2026/07/16 14:29:41" },
+  { name:"普通用户", tag:"user", color:"#22c55e", isDefault:true, count:168, order:4, desc:"普通用户", updated:"2026/07/22 13:17:51" },
+  { name:"bruce7", tag:"bruce7", color:"#22c55e", isDefault:false, count:0, order:9, desc:"", updated:"2026/07/17 11:11:11" },
+  { name:"自定义test", tag:"AAA权限批发", color:"#22c55e", isDefault:false, count:0, order:10, desc:"AAA权限批发", updated:"2026/06/02 22:54:01" },
+];
+
+const LOGS = [
+  { user:"vince", uname:"vince001", id:1206, status:"LOGIN", device:"MACOS", deviceId:"015D520D-4...", ip:"43.98.161.36", loc:"中国/阿里", header:"macOS", time:"2026/07/24 18:30:40" },
+  { user:"vince002", uname:"vince002", id:1207, status:"LOGIN", device:"WINDOWS", deviceId:"41ABB3DF-6...", ip:"43.98.185.67", loc:"中国/阿里", header:"Windows", time:"2026/07/24 18:30:04" },
+  { user:"vince002", uname:"vince002", id:1207, status:"LOGIN", device:"WINDOWS", deviceId:"41ABB3DF-6...", ip:"43.98.185.67", loc:"中国/阿里", header:"Windows", time:"2026/07/24 18:22:50" },
+  { user:"vinceSIT", uname:"vinceSIT", id:1242, status:"LOGIN", device:"ANDROID", deviceId:"106f935deb...", ip:"43.98.161.36", loc:"中国/阿里", header:"Android", time:"2026/07/24 18:05:00" },
+  { user:"vince002", uname:"vince002", id:1207, status:"LOGOUT", device:"ANDROID", deviceId:"N/A", ip:"43.98.161.36", loc:"中国/阿里", header:"N/A", time:"2026/07/24 18:04:50" },
+];
+
+const USERS = [
+  { name:"test003", uname:"test003", id:1328, phone:"N/A", email:"N/A", role:"普通用户", status:"启用", reg:"2026/07/24 16:54:18", upd:"2026/07/24 16:54:18", last:"N/A" },
+  { name:"sana451", uname:"sana451", id:1327, phone:"N/A", email:"pm.sana001@gmail.com", role:"普通用户", status:"启用", reg:"2026/07/22 15:32:29", upd:"2026/07/22 15:32:29", last:"2026/07/26 13:15:19" },
+  { name:"oopp123", uname:"oopp123", id:1326, phone:"+886 939243420", email:"t9d4l8vx72@gmail.com", role:"普通用户", status:"启用", reg:"2026/07/22 15:22:57", upd:"2026/07/22 15:22:57", last:"2026/07/24 10:25:25" },
+  { name:"peace999", uname:"peace999", id:1325, phone:"+86 13042789352", email:"999sit@163.com", role:"普通用户", status:"启用", reg:"2026/07/21 13:10:37", upd:"2026/07/21 13:14:57", last:"2026/07/22 17:40:34" },
+  { name:"kimi_wu", uname:"kimi_wu", id:1324, phone:"+81 9012345678", email:"kimi.wu@example.com", role:"高级用户", status:"启用", reg:"2026/07/19 09:40:11", upd:"2026/07/20 10:02:44", last:"2026/07/25 08:12:03" },
+  { name:"guest_007", uname:"guest_007", id:1319, phone:"N/A", email:"guest007@mail.com", role:"普通用户", status:"停用", reg:"2026/07/12 11:02:09", upd:"2026/07/18 09:00:00", last:"2026/07/18 09:03:41" },
+];
+
+function pill(text, tone) {
+  const tones = { green:'background:#ecfdf5;color:#059669', slate:'background:#f1f5f9;color:#64748b', red:'background:#fff1f2;color:#f43f5e', blue:'background:#eff6ff;color:#2563eb' };
+  return `<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style="${tones[tone]}">${text}</span>`;
+}
+
+function renderRoles() {
+  const body = document.getElementById('rolesBody');
+  body.innerHTML = ROLES.map(r => `
+    <tr class="border-b border-slate-50 last:border-0 hover:bg-slate-50/60 transition">
+      <td class="px-5 py-4"><span class="flex items-center gap-2 font-medium"><span class="w-2 h-2 rounded-full" style="background:${r.color}"></span>${r.name}</span></td>
+      <td class="px-5 py-4"><span class="px-2 py-1 rounded-md bg-slate-100 text-slate-500 text-[13px]">${r.tag}</span></td>
+      <td class="px-5 py-4"><div class="flex gap-2">${pill('启用','green')}${r.isDefault ? pill('默认','blue') : ''}</div></td>
+      <td class="px-5 py-4">${r.count}</td>
+      <td class="px-5 py-4">${r.order}</td>
+      <td class="px-5 py-4 text-slate-400">${r.desc || '—'}</td>
+      <td class="px-5 py-4 text-slate-400 whitespace-nowrap">${r.updated}</td>
+      <td class="px-5 py-4"><svg class="icon text-slate-400" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></td>
+    </tr>
+  `).join('');
+}
+
+function renderLogs() {
+  const body = document.getElementById('logsBody');
+  body.innerHTML = LOGS.map(l => `
+    <tr class="border-b border-slate-50 last:border-0 hover:bg-slate-50/60 transition">
+      <td class="px-5 py-4">
+        <div class="font-medium">${l.user}</div>
+        <div class="text-slate-400 text-[13px]">${l.uname}</div>
+        <div class="text-slate-400 text-[13px]">ID: ${l.id}</div>
+      </td>
+      <td class="px-5 py-4"><span class="px-3 py-1.5 rounded-md text-white text-[12px] font-medium" style="background:${l.status==='LOGIN' ? '#0f172a' : '#cbd5e1'}">${l.status}</span></td>
+      <td class="px-5 py-4"><span class="px-2 py-1 rounded-md bg-sky-50 text-sky-600 text-[12px] font-medium">${l.device}</span></td>
+      <td class="px-5 py-4 whitespace-nowrap">${l.deviceId}</td>
+      <td class="px-5 py-4 whitespace-nowrap">${l.ip}</td>
+      <td class="px-5 py-4">${l.loc}</td>
+      <td class="px-5 py-4">${l.header}</td>
+      <td class="px-5 py-4 whitespace-nowrap text-slate-500">${l.time}</td>
+    </tr>
+  `).join('');
+}
+
+function renderUsers() {
+  const body = document.getElementById('usersBody');
+  body.innerHTML = USERS.map(u => `
+    <tr class="border-b border-slate-50 last:border-0 hover:bg-slate-50/60 transition">
+      <td class="px-5 py-4"><input type="checkbox" class="rounded border-slate-300"/></td>
+      <td class="px-5 py-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-medium">${u.name[0]}</div>
+          <div>
+            <div class="font-medium text-slate-800">${u.name}</div>
+            <div class="text-slate-400 text-[13px]">${u.uname}</div>
+            <div class="text-slate-400 text-[13px]">ID: ${u.id}</div>
+          </div>
+        </div>
+      </td>
+      <td class="px-5 py-4">
+        <div style="color:${u.phone==='N/A' ? '#94a3b8' : '#0284c7'}">${u.phone}</div>
+        <div class="text-slate-400">${u.email}</div>
+      </td>
+      <td class="px-5 py-4"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>${u.role}</span></td>
+      <td class="px-5 py-4">${pill(u.status, u.status==='启用' ? 'green' : 'red')}</td>
+      <td class="px-5 py-4 whitespace-nowrap text-slate-500">${u.reg}</td>
+      <td class="px-5 py-4 whitespace-nowrap text-slate-500">${u.upd}</td>
+      <td class="px-5 py-4 whitespace-nowrap text-slate-500">${u.last}</td>
+      <td class="px-5 py-4 text-slate-400">—</td>
+      <td class="px-5 py-4"><svg class="icon text-slate-400" style="width:16px;height:16px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></td>
+    </tr>
+  `).join('');
+}
+
+// clock
+function tick() {
+  const now = new Date();
+  const p = n => String(n).padStart(2,'0');
+  document.getElementById('clock').textContent = `2026/07/26 ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
+}
+setInterval(tick, 1000);
+
+renderNav();
+renderRoles();
+renderLogs();
+renderUsers();
+</script>
+</body>
+</html>
